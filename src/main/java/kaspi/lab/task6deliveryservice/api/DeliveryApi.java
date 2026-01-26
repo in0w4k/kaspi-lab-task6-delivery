@@ -1,6 +1,7 @@
 package kaspi.lab.task6deliveryservice.api;
 
 import kaspi.lab.task6deliveryservice.dto.DeliveryRequest;
+import kaspi.lab.task6deliveryservice.dto.DeliveryStatusDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -17,5 +18,12 @@ public class DeliveryApi {
             System.out.println(response);
             return response;
         });
+    }
+
+    @GetMapping("/status/{productId}")
+    public Mono<DeliveryStatusDto> getStatus(@PathVariable Long productId) {
+        if (productId > 100) return Mono.empty();
+        String status = (productId % 2 == 0) ? "DELIVERED" : "IN_PROGRESS";
+        return Mono.just(new DeliveryStatusDto(productId, status));
     }
 }
